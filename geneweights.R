@@ -1,5 +1,7 @@
+#Remove NAs from ensembl translation
 df <- df[!is.na(df$ensembl_gene),]
 
+#in a for loop, find which gene weights have an associated ensembl name and build a list
 gene.w <- list()
 for (j in 1:length(gene.set.collection)){
   gwi <- c()
