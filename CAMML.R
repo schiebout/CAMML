@@ -1,6 +1,6 @@
-CAMML <- function(seurat, gene.weights, gene.set.collection, ensembl.ids){
+CAMML <- function(seurat, gene.weights, gene.set.collection,){
   #run VAM with ensembl gene set 
-  gene.set.collection = createGeneSetCollection(gene.ids=ensembl.ids, gene.set.collection=gene.set.collection)
+  #gene.set.collection = createGeneSetCollection(gene.ids=ensembl.ids, gene.set.collection=gene.set.collection)
   
   seurat = vamForSeurat(seurat.data=seurat, gene.weights = gene.weights, gene.set.collection=gene.set.collection, center=F, gamma=T, sample.cov=F, return.dist=T)
   
@@ -46,4 +46,5 @@ CAMML <- function(seurat, gene.weights, gene.set.collection, ensembl.ids){
     inde <- which(dif > max(dif*.9))
     celz10p[[i]] <- data.frame(dif[inde,],row.names=rownames(dif)[inde])
   }
+  return(seurat, celz, celztop2, celzfold, celz10p)
 }
