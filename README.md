@@ -6,4 +6,4 @@ To download CAMML, simply type in R:
 
 install.packages("CAMML")
 
-For further usage instructions, please look at one of the several vignettes available on this page.
+For further usage instructions, please look at one of the vignettes available on this page.
