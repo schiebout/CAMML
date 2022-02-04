@@ -40,4 +40,3 @@ In conclusion, we developed weighted VAM and CAMML, both of which are available 
 
 # References
 
-
