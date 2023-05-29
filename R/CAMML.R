@@ -46,7 +46,7 @@ CAMML <- function(seurat, gene.set.df){
   }
 
   
-  df <- gene.set.df
+  df <- gene.set.df[!duplicated(gene.set.df),]
   labs <- sort(unique(df$cell.type))
   
   #set number of gene sets
@@ -67,10 +67,17 @@ CAMML <- function(seurat, gene.set.df){
   if (grepl("^ENSG",df$ensembl.id[1])){
     symbol <- org.Hs.egSYMBOL2EG
     ensem <- org.Hs.egENSEMBL
+    cut <- 15
   }
-  if (grepl("^ENSMUS",df$ensembl.id[1])){
+  if (grepl("^ENSMUSG",df$ensembl.id[1])){
     symbol <- org.Mm.egSYMBOL2EG
     ensem <- org.Mm.egENSEMBL
+    cut <- 18
+  }
+  if (grepl("^ENSDARG",df$ensembl.id[1])){
+    symbol <- org.Dr.egSYMBOL2EG
+    ensem <- org.Dr.egENSEMBL
+    cut <- 18
   }
   
   symbol2entrez = mappedkeys(symbol)
@@ -109,7 +116,13 @@ CAMML <- function(seurat, gene.set.df){
   
   gene.set.collection = createGeneSetCollection(gene.ids=ensembl.ids,
                                                 gene.set.collection=gene.set.collection)
-  
+  for (i in 1:length(gene.set.collection)){
+    if (!is.null(nrow(gene.set.collection[[i]]))){
+      gene.set.collection[[i]] <- gene.set.collection[[i]][1,]
+    }
+    names(gene.set.collection[[i]]) <- substr(names(gene.set.collection[[i]]),1,cut)
+    gene.set.collection[[i]] <- gene.set.collection[[i]][!duplicated(names(gene.set.collection[[i]]))]
+  }
   #remove NA genes
   df <- df[!is.na(df$ensembl.id),]
   

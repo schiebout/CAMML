@@ -19,7 +19,7 @@
 # "fc" will use the fold change as a cutoff
 # "-logp" will use the -log10(p-value) as a cutoff
 # -cutoff: The desired cut-off(s) for genes to include in the gene sets.
-# -species: Either "Hs" or "Mm" for human or mouse respectively. 
+# -species: Either "Hs", "Mm" or "Dr for human, mouse, or zebrafish respectively. 
 # This is used to convert the gene symbols to ensembl IDs.
 # -weight.type: Either "logfc", "fc", or "-logp". Dictates what value will be returned for gene weights. 
 # "logfc" will return the log2 fold change
@@ -35,7 +35,7 @@
 BuildGeneSets <- function(exp.data, labels = as.character(Idents(exp.data)),  cutoff.type = "logfc", cutoff = 2, species = "Hs", weight.type = "logfc") {
   #access human reference data
   if (! is.matrix(exp.data)){
-    if (class(exp.data) == "Seurat" & is.object(exp.data)){
+    if (is(exp.data, "Seurat")){
       colcount <- exp.data@assays$RNA@counts
     }
     else{
@@ -76,8 +76,8 @@ BuildGeneSets <- function(exp.data, labels = as.character(Idents(exp.data)),  cu
     }
   }
   
-  if (! species %in% c("Hs","Mm")){
-    stop("Species provided is not valid. Please give either \"Hs\" for human or \"Mm\" for mouse.")
+  if (! species %in% c("Hs","Mm","Dr")){
+    stop("Species provided is not valid. Please give either \"Hs\" for human, \"Mm\" for mouse, or \"Dr\" for zebrafish.")
   }
   
   if (! weight.type %in% c("logfc","fc","-logp")){
@@ -142,6 +142,10 @@ BuildGeneSets <- function(exp.data, labels = as.character(Idents(exp.data)),  cu
   if (species == "Mm"){
     symbol <- org.Mm.egSYMBOL2EG
     ensem <- org.Mm.egENSEMBL
+  }
+  if (species == "Dr"){
+    symbol <- org.Dr.egSYMBOL2EG
+    ensem <- org.Dr.egENSEMBL
   }
   
   symbol2entrez = mappedkeys(symbol)
